@@ -1,0 +1,88 @@
+{% extends 'crmApp/base.html' %}
+
+{% block title %}Заказ {{ order_info.order_id }}{% endblock %}
+
+{% block content %}
+    <div class="order-info">
+        <div class="order-info__title">
+            Заказ: {{ order_info.order_id }}
+        </div>
+        <div class="blocks-row order-info__vert-style">
+            <div class="block order-info__block">
+                <div class="block__title">
+                    Данные заказа неизменяемые
+                </div>
+                <div class="block__elem">
+                 <span class="block_bold">Статус заказа:</span> {{ order_info.alidetailinfo_order_status }}
+                </div>
+                <div class="block__elem">
+                    <span class="block_bold">Время создания заказа:</span> {{ order_info.alidetailinfo_gmt_create|date:"d M Y H:i" }}
+                </div>
+                <div class="block__elem">
+                 <span class="block_bold">Адрес в Али:</span> {{ order_info.alidetailinfo_receipt_address }}
+                </div>
+                <div class="block__elem">
+                 <span class="block_bold">Нормализованный адрес:</span> {{ order_info.pochta_full_normalized_address }}
+                </div>
+                <div class="block__elem"> <span class="block_bold">Товары:</span>
+                    <ol>
+                        {% for i in order_info.aliordersproductlist_product_name %}
+                        <li>{{i}}</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+            <form class="block order-info__block"  action="" method="post">
+                {% csrf_token %}
+                <div class="block__title">
+                    Данные заказа изменяемые
+                </div>
+                <div class="block__elem">
+                 <span class="block_bold">{{ form.recieverFIO.label }}:</span> {{ form.recieverFIO }}
+                </div>
+                <div class="block__elem">
+                 <span class="block_bold">{{ form.phoneCountry.label }}</span> {{ form.phoneCountry }}
+                </div>
+                <div class="block__elem">
+                 <span class="block_bold">{{ form.recieverPhone.label }}</span> {{ form.recieverPhone }}
+                </div>
+            {%  if  order_info.cdekorderresponse_cdekResponse.requests.0.state %}
+                <div class="block__elem">
+                    <span class="block_bold">Ответ СДЭК на новую заявку:</span> {{ order_info.cdekorderresponse_cdekResponse.requests.0.state }}
+                </div>
+                <div class="block__elem">
+                    <span class="block_bold">Накладная СДЭК создана:</span> {{ order_info.cdekorderstatus_cdekStatus.requests.0.state }}
+                </div>
+                {% if order_info.cdekorderstatus_cdekStatus.requests.0.errors %}
+                    <div class="block__elem">
+                        <span class="block_bold">Ошибки создания накладной СДЭК:</span> {{ order_info.cdekorderstatus_cdekStatus.requests.0.errors }}
+                    </div>
+                {% endif %}
+                <div class="block__elem">
+                    <span class="block_bold">Номер накладной СДЭК:</span> {{ order_info.cdekorderstatus_cdekStatus.entity.cdek_number }}
+                </div>
+                <div class="block__elem">
+                    <span class="block_bold">ПВЗ доставки:</span> {{ order_info.cdek_pvz.0.location.address }}
+                </div>
+            {% else %}
+                <div class="block__radiobutton">
+                    <span class="block_bold">Город отправки:</span> {{ form.selectShippingFrom }}
+                </div>
+                <div class="block__elem">
+                    <span class="block_bold">Тариф:</span>
+                        {{ form.fromKazan }}
+                        {{ form.fromChelny }}
+                </div>
+                <div class="block__elem">
+                    <span class="block_bold">{{ form.selectPVZ.label }}</span> {{ form.selectPVZ }}
+                </div>
+                <div class="block__elem">
+                    <span class="block_bold">{{ form.insurance.label }}</span> {{ form.insurance }}
+                </div>
+                <input type="submit" value=" Создать СДЭК накладную"/>
+
+            {% endif %}
+            </form>
+        </div>
+    </div>
+{% endblock %}
