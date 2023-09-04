@@ -1,20 +1,18 @@
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, HttpResponse
 from django.urls import reverse_lazy
-from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
-from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from .models import Brands, Catalog, Stores, Suppliers, AliOrdersProductList, AliProducts, AliOrders
-from .forms import BrandForm, SupplierForm, \
-    StoresForm, CatalogForm, LoginForm, UserRegForm, OrderInfoForm, OrderInfoFormNonPVZ, DashBoardForm, UploadFileForm
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
-from .servicesCRM import serviceAli, check_funcs, orderAliInfo, DEPARTURE_CITIES
-from django.core.paginator import Paginator
+from django.views.generic.list import ListView
+
 from services.cdek_services import CdekAPI, CdekOrder
 from services.utils import handle_myownstore, handle_tradechas, handle_syncInventory, handle_getsyncInventoryResults, \
     handle_AvangardProducts
-from crmApp.tasks import saveToFile
-from crmApp.tasks import task_handle_avangardstore, task_handle_myownstore
+from .forms import BrandForm, SupplierForm, \
+    StoresForm, CatalogForm, UserRegForm, OrderInfoForm, OrderInfoFormNonPVZ, DashBoardForm
+from .models import Brands, Catalog, Stores, Suppliers, AliProducts, AliOrders
+from .servicesCRM import serviceAli, check_funcs, orderAliInfo, DEPARTURE_CITIES
 
 # # пункты отправления посылок
 # SOURCE_CITIES = {'selectTarifSaratov':'SAR4', 'selectTarifKazan':'KZN37',

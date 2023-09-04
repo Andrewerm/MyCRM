@@ -38,8 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crmApp',
     'djmoney',
-    'rest_framework',
-    'django_celery_results',
 ]
 
 REST_FRAMEWORK = {
@@ -134,8 +132,8 @@ LOGOUT_URL = reverse_lazy('crm:logout')
 # CELERY_BROKER_URL = 'pyamqp://guest@localhost//'
 # CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "pyamqp://guest@localhost//")
 
-CELERY_BROKER_URL = "redis://localhost:6379/0"
-CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+# CELERY_BROKER_URL = "redis://localhost:6379/0"
+# CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
 
 # CELERY_BROKER_URL = "redis://mycrm_redis:6380/0"
 # CELERY_RESULT_BACKEND = "redis://mycrm_redis:6380/0"
